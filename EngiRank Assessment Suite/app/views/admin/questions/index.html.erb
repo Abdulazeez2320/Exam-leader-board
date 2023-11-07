@@ -1,0 +1,85 @@
+<div class='container'>
+  <nav class="navbar navbar-light bg-light">
+    <a class="navbar-brand float-left" href="#">Manage Questions</a>
+    <%= link_to "Home", admin_root_path, class: "btn btn-outline-primary" %>
+  </nav>
+<%= form_tag admin_questions_path, method: :get, class: "my-3" do %>
+  <div class="row align-items-between">
+    <div class="col-md-2 mb-2">
+      <%= link_to 'Add New Question', new_admin_question_path, class: 'btn btn-primary btn-block' %>
+    </div>
+    <div class="col-md-4 mb-2">
+      <%= text_field_tag :q, params[:q], class: "form-control", placeholder: "Search Questions..." %>
+    </div>
+    <div class="col-md-4 mb-2">
+      <%= select_tag :exam_id, options_for_select(Exam.all.map { |e| [e.exam_name, e.id] }, params[:exam_id]), class: "form-control", prompt: "Select Exam" %>
+    </div>
+    <div class="col-md-2 mb-2">
+      <%= submit_tag "Search", class: "btn btn-primary btn-block" %>
+    </div>
+  </div>
+<% end %>
+
+  <div class='table-responsive'>
+    <table class="table">
+      <thead class="bg-light">
+        <tr>
+          <th>Exam</th>
+          <th>Question Text</th>
+          <th>Answer1</th>
+          <th>Answer2</th>
+          <th>Answer3</th>
+          <th>Answer4</th>
+          <th>Correct Answer</th>
+          <th class='text-center'>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @questions.each do |question| %>
+          <tr>
+            <td><%= question.exam.exam_name %></td>
+            <td><%= question.question_text %></td>
+            <td><%= question.answer1 %></td>
+            <td><%= question.answer2 %></td>
+            <td><%= question.answer3 %></td>
+            <td><%= question.answer4 %></td>
+            <td class=' pl-5 '><%= question.correct_answer %></td>
+            <td class='d-flex'>
+              <%= link_to 'Edit', edit_admin_question_path(question), class: 'btn btn-secondary m-2' %>
+              <%= link_to 'Delete', admin_question_path(question), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger m-2' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+  <ul class="pagination justify-content-center">
+    <% if @questions.current_page > 1 %>
+      <li class="page-item">
+        <%= link_to '&laquo; Previous'.html_safe, { page: @questions.current_page - 1 }, class: 'page-link' %>
+      </li>
+    <% end %>
+
+    <% (1..@questions.total_pages).each do |page| %>
+      <% if page == @questions.current_page %>
+        <li class="page-item active">
+          <span class="page-link">
+            <%= page %>
+            <span class="visually-hidden">(current)</span>
+          </span>
+        </li>
+      <% else %>
+        <li class="page-item">
+          <%= link_to page, { page: page }, class: 'page-link' %>
+        </li>
+      <% end %>
+    <% end %>
+
+    <% if @questions.current_page < @questions.total_pages %>
+      <li class="page-item">
+        <%= link_to 'Next &raquo;'.html_safe, { page: @questions.current_page + 1 }, class: 'page-link' %>
+      </li>
+    <% end %>
+  </ul>
+</div>

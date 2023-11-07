@@ -1,0 +1,11 @@
+<div class='container'>
+<h1>Add New Admin</h1>
+<%= form_with(model: @user, url: admin_users_path, class: 'form') do |form| %>
+  <%= render 'user_form_fields', form: form %>
+
+  <div class="form-group">
+    <%= form.submit 'Create Admin', class: 'btn btn-primary' %>
+    <%= link_to'Cancel', admin_users_path, class: 'btn btn-secondary' %>
+  </div>
+<% end %>
+</div>

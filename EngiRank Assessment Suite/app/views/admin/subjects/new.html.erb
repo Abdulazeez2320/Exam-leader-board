@@ -1,0 +1,5 @@
+<div class='container'>
+  <h1>Add New Subject</h1>
+  <%= render 'form', subject: @subject, url: admin_subjects_path, method: :post, submit_button_text: 'Create Subject', departments: @departments %>
+  <p><%= link_to 'Back to Questions', admin_questions_path %></p>
+</div>
